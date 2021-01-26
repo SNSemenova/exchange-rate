@@ -1,9 +1,18 @@
 <template>
-  <main>
+  <v-main>
     <currencies-selection/>
-    <currencies-table :rates="ratesToShow"/>
-    <button type="button" @click="getCurrencies()">Обновить курсы</button>
-  </main>
+    <v-container v-if="ratesToShow.length > 0">
+      <v-card :loading="isLoading">
+        <v-container>
+          <currencies-table :rates="ratesToShow"/>
+          <v-divider/>
+          <v-card-actions>
+            <v-btn type="button" @click="getCurrencies()">Обновить курсы</v-btn>
+          </v-card-actions>
+        </v-container>
+      </v-card>
+    </v-container>
+  </v-main>
 </template>
 
 <script>
@@ -20,6 +29,7 @@ export default {
     return {
       allRates: ({}),
       requestInterval: null,
+      isLoading: false,
     };
   },
   mounted() {
@@ -28,11 +38,13 @@ export default {
   },
   methods: {
     getCurrencies() {
+      this.isLoading = true;
       fetch('https://www.cbr-xml-daily.ru/daily_json.js')
         .then(
           (response) => response.json(),
         ).then((json) => {
           this.allRates = json.Valute;
+          setTimeout(() => { this.isLoading = false; }, 1000);
         });
     },
   },
@@ -57,9 +69,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-main {
-  flex-grow: 1;
-}
-</style>
