@@ -1,11 +1,17 @@
 <template>
-  <div>
-    <template v-for="currency in availableCurrencies">
-      <input :key="currency"
-        type="checkbox" :id="currency" :value="currency" v-model="currenciesToShow">
-      <label :key="`${currency}-label`" :for="currency">{{ currency }}</label>
-    </template>
-  </div>
+  <v-container>
+    <v-card>
+      <v-card-actions>
+        <v-row>
+          <v-col v-for="currency in availableCurrencies" :key="currency">
+            <v-checkbox
+              :label="currency" :value="currency" v-model="currenciesToShow">
+            </v-checkbox>
+          </v-col>
+        </v-row>
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
